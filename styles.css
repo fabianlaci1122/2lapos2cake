@@ -15,11 +15,13 @@
   --whisper:    #EFE5DC;
   --shadow-warm: rgba(107, 58, 75, 0.08);
 
-  /* Type scale — a tortamuhely.com betűkészletéhez igazítva:
-     Poiret One (geometrikus display, mint a logó/menü) + EB Garamond (lágy szerif törzs) */
+  /* Type scale — pontosan a tortamuhely.com betűkészlete (WhatFont alapján):
+     Poiret One (geometrikus display: logó, menü, eyebrow, szekciócímek)
+     + Corben (a kiemelt üdvözlő cím) + Cormorant (lágy szerif törzsszöveg) */
   --display: 'Poiret One', 'Century Gothic', 'Trebuchet MS', sans-serif;
-  --serif:   'EB Garamond', 'Cormorant', Georgia, serif;
-  --body:    'EB Garamond', Georgia, 'Times New Roman', serif;
+  --display-alt: 'Corben', 'Poiret One', 'Century Gothic', sans-serif;
+  --serif:   'Cormorant', 'EB Garamond', Georgia, serif;
+  --body:    'Cormorant', 'EB Garamond', Georgia, serif;
   --mono:    'Poiret One', 'Century Gothic', sans-serif;
 
   /* Rhythm */
@@ -53,9 +55,9 @@ html {
 
 body {
   font-family: var(--body);
-  font-weight: 400;
-  font-size: 1.12rem;
-  line-height: 1.75;
+  font-weight: 500;            /* Cormorant lágy/vékony — 500 a kényelmes olvashatóságért */
+  font-size: 1.2rem;
+  line-height: 1.7;
   color: var(--charcoal);
   background: var(--cream);
   overflow-x: hidden;
@@ -459,146 +461,139 @@ section { padding: clamp(4rem, 10vw, 9rem) 0; position: relative; }
    Hero
    ========================================================================= */
 
-/* Full-width sávos hero — váltakozó képekkel (req 3 + 12), ez ugrik
-   szembe a látogatóval az oldal megnyitásakor. */
+/* Letisztult, alacsonyabb sávos hero — váltakozó képekkel, az eredeti
+   tortamuhely.com stílusában: nincs sötétítés/szöveg a képen, a szöveg a kép alá kerül. */
 .hero {
   position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-end;
+  height: clamp(460px, 82vh, 840px);
   overflow: hidden;
-  background: var(--charcoal);
+  background: var(--whisper);
 }
-.hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
+.hero-media { position: absolute; inset: 0; z-index: 0; }
 .hero-media .hero-slide {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 38%;
+  object-position: center 42%;
   opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 1.8s ease, transform 8s ease-out;
+  transform: scale(1.04);
+  transition: opacity 1.6s ease, transform 8s ease-out;
 }
-.hero-media .hero-slide.is-active {
-  opacity: 1;
-  transform: scale(1.0);
-  z-index: 1;
-}
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(to top,
-    rgba(44, 39, 36, 0.62) 0%,
-    rgba(44, 39, 36, 0.30) 42%,
-    rgba(44, 39, 36, 0.16) 66%,
-    rgba(44, 39, 36, 0.48) 100%);
-}
-.hero-content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: var(--container);
-  margin: 0 auto;
-  padding-left: clamp(1.25rem, 4vw, 3rem);
-  padding-right: clamp(1.25rem, 4vw, 3rem);
-  padding-top: 9rem;
-  padding-bottom: clamp(4rem, 11vh, 8rem);
-  text-shadow: 0 1px 22px rgba(34, 24, 22, 0.42);
-}
-.hero-eyebrow { margin-bottom: 1.2rem; color: var(--rose-soft); }
-.hero-title {
-  margin-bottom: 1.5rem;
-  color: #FFFFFF;
-  max-width: 16ch;
-}
-.hero-title em { color: var(--rose-soft); }
-.hero-lead {
-  margin-bottom: 2.2rem;
-  max-width: 44ch;
-  color: rgba(255, 255, 255, 0.94);
-}
-.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-/* Sötét fotó fölött a kísértetgomb világos legyen */
-.hero .btn-ghost {
-  color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.65);
-}
-.hero .btn-ghost::before { background: #FFFFFF; }
-.hero .btn-ghost:hover { color: var(--burgundy); }
-
-.hero-scroll {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
-  z-index: 3;
-}
-.hero-scroll::after {
-  content: '';
-  width: 1px;
-  height: 50px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), transparent);
-  animation: scrollLine 2s ease-in-out infinite;
-}
-@keyframes scrollLine {
-  0%, 100% { transform: scaleY(0.5); opacity: 0.3; transform-origin: top; }
-  50%      { transform: scaleY(1.0); opacity: 1; transform-origin: top; }
-}
+.hero-media .hero-slide.is-active { opacity: 1; transform: scale(1.0); z-index: 1; }
 
 @media (max-width: 900px) {
-  .hero { min-height: 88vh; }
-  .hero-content { padding-top: 7rem; }
-  .hero-scroll { display: none; }
+  .hero { height: clamp(320px, 62vh, 600px); }
+}
+
+/* Vizuálisan rejtett, de képernyőolvasónak/SEO-nak megmaradó cím */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+  overflow: hidden; white-space: nowrap;
+}
+
+/* Üdvözlő-szekció gombsora (a heróról ide kerültek a CTA-k) */
+.welcome-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+
+/* =========================================================================
+   Mentes vonal & házhozszállítás — letisztult, az oldal stílusába simuló szekció
+   ========================================================================= */
+.featurestrip {
+  background: var(--ivory);
+  border-top: 1px solid var(--whisper);
+  border-bottom: 1px solid var(--whisper);
+}
+.feature-head { text-align: center; max-width: 720px; margin: 0 auto clamp(2.5rem, 5vw, 3.5rem); }
+.feature-head .eyebrow { display: block; margin-bottom: 0.9rem; }
+.feature-head h2 {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+.feature-head h2 em { font-style: italic; color: var(--rose-gold); }
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  max-width: 940px;
+  margin: 0 auto;
+}
+.feature { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.feature-icon { width: 52px; height: 52px; color: var(--rose-gold); margin-bottom: 1.2rem; }
+.feature-icon svg { width: 100%; height: 100%; display: block; }
+.feature h3 {
+  font-family: var(--display);
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  margin-bottom: 0.8rem;
+}
+.feature p { margin: 0 auto 1.3rem; max-width: 42ch; }
+.feature .badges { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+.feature .badge {
+  display: inline-block;
+  font-family: var(--display);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  background: transparent;
+  border: 1px solid var(--rose-soft);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+}
+.feature .btn-link { margin-top: 0.3rem; }
+
+@media (min-width: 761px) {
+  .feature-grid .feature { padding: 0 clamp(2rem, 5vw, 4rem); }
+  .feature-grid .feature:first-child { border-right: 1px solid var(--whisper); }
+}
+@media (max-width: 760px) {
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-grid .feature:first-child {
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--whisper);
+  }
 }
 
 /* =========================================================================
    Section header
    ========================================================================= */
 
+/* Egységes, szám nélküli fejezet-fejléc (a korábbi össze-vissza "— 0X /"
+   számozás helyett tiszta, vízszintes felirat) */
 .section-head {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 4rem;
-  margin-bottom: clamp(3rem, 6vw, 5rem);
-  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  max-width: 64ch;
 }
-.section-head .chapter-num {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  align-self: end;
-  padding-bottom: 0.5rem;
+.section-head .chapter-num,
+.section-head .eyebrow {
+  display: block;
+  margin-bottom: 1rem;
 }
 .section-head h2 {
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  font-weight: 300;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 5.5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: 0.02em;
 }
 .section-head h2 em {
   font-style: italic;
   color: var(--rose-gold);
-  font-weight: 300;
+  font-weight: 400;
 }
-
-@media (max-width: 700px) {
-  .section-head { grid-template-columns: 1fr; gap: 1.5rem; }
-  .section-head .chapter-num { writing-mode: horizontal-tb; transform: none; }
+.section-head.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 /* =========================================================================
@@ -669,6 +664,107 @@ section { padding: clamp(4rem, 10vw, 9rem) 0; position: relative; }
 @media (max-width: 900px) {
   .categories { grid-template-columns: 1fr; gap: 1rem; }
   .cat-card-arrow { opacity: 1; transform: none; }
+}
+
+/* =========================================================================
+   Üdvözlő blokk + részletes profil-szekciók (Gyerek / Mentes / Esküvői)
+   ========================================================================= */
+
+/* Kiemelt üdvözlő cím Corben betűvel (mint a tortamuhely.com „OLDALAMON!”) */
+.font-corben,
+.welcome-text h2 {
+  font-family: var(--display-alt);
+  font-weight: 700;
+  letter-spacing: 0.005em;
+}
+
+.welcome { background: var(--ivory); }
+.welcome-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2.5rem, 5vw, 5.5rem);
+  align-items: center;
+}
+.welcome-image {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 12px solid var(--rose-soft);
+  box-shadow: 0 18px 50px rgba(107, 58, 75, 0.12);
+}
+.welcome-image img { width: 100%; height: 100%; object-fit: cover; }
+.welcome-text .eyebrow { display: block; margin-bottom: 0.9rem; }
+.welcome-text h2 {
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  line-height: 1.05;
+  margin-bottom: 1.6rem;
+  color: var(--burgundy);
+}
+.welcome-text p { margin-bottom: 1.1rem; }
+.welcome-text .signature {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 2rem;
+  color: var(--burgundy);
+  margin-top: 1.5rem;
+  display: block;
+}
+.welcome-text .signature small {
+  display: block;
+  font-family: var(--display);
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rose-gold);
+  margin-top: 0.4rem;
+}
+
+/* --- Profil-szekciók zigzag elrendezésben --- */
+.pillars { display: grid; gap: clamp(4.5rem, 9vw, 8.5rem); }
+.pillar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5.5rem);
+  align-items: center;
+}
+.pillar.reverse .pillar-media { order: 2; }
+.pillar-body .eyebrow { display: block; margin-bottom: 0.9rem; }
+.pillar-body h2 {
+  font-family: var(--display);
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.12;
+  margin-bottom: 1.4rem;
+  color: var(--burgundy);
+}
+.pillar-body p { margin-bottom: 1rem; }
+.pillar-body .pillar-em { color: var(--rose-gold); font-style: italic; }
+.pillar-cta { margin-top: 1.9rem; }
+
+/* Átfedő, rózsaszín keretes képkollázs (a tortamuhely.com szellemében) */
+.pillar-media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+.pillar-media .p-img {
+  position: absolute;
+  overflow: hidden;
+  border: 10px solid var(--rose-soft);
+  background: var(--rose-soft);
+  box-shadow: 0 18px 50px rgba(107, 58, 75, 0.14);
+}
+.pillar-media .p-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pillar-media .p-main { top: 0; left: 0; width: 66%; height: 90%; z-index: 1; }
+.pillar-media .p-sub  { bottom: 0; right: 0; width: 52%; height: 58%; z-index: 2; }
+
+@media (max-width: 860px) {
+  .pillar { grid-template-columns: 1fr; gap: 2rem; }
+  .pillar.reverse .pillar-media { order: 0; }
+  .welcome-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .welcome-image { max-width: 420px; margin: 0 auto; }
+  .pillar-media { aspect-ratio: 4 / 3; max-width: 540px; width: 100%; margin: 0 auto; }
 }
 
 /* =========================================================================

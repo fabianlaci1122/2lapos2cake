@@ -17,12 +17,12 @@
   </script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LipCake Factory — Egyedi gyerek dizájn és mentes torták, Budapest</title>
-  <meta name="description" content="Keléné Lipka Tímea kézzel készíti minden tortáját — gyerek dizájn torták és mentes (cukor-, glutén-, laktóz- és tojásmentes, nyers vegán) különlegességek, kizárólag minőségi alapanyagokból, ízfokozók nélkül. 1203 Budapest." />
+  <title>LipCake Factory — Egyedi gyerek- és mentes torták, Budapest</title>
+  <meta name="description" content="Keléné Lipka Tímea kézzel készíti minden tortáját — gyerek torták és mentes (cukor-, glutén-, laktóz- és tojásmentes, nyers vegán) különlegességek, kizárólag minőségi alapanyagokból, ízfokozók nélkül. 1203 Budapest." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poiret+One&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Corben:wght@400;700&family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poiret+One&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -32,7 +32,8 @@
   <nav class="nav" aria-label="Főnavigáció">
     <a href="index.html" class="nav-brand" aria-label="LipCake Factory Tortaműhely"><img class="nav-logo" src="https://tortamuhely.com/wp-content/uploads/2022/04/tortamuhely-retina.jpg" alt="LipCake Factory Tortaműhely" /></a>
     <ul class="nav-menu">
-      <li><a href="design-tortak.html">Design</a></li>
+      <li><a href="gyerek-tortak.html">Gyerek torták</a></li>
+      <li><a href="mentes-tortak.html">Mentes</a></li>
       <li><a href="eskuvoi-tortak.html">Esküvői</a></li>
       <li><a href="izlista.html">Ízek</a></li>
       <li><a href="galeria.html">Galéria</a></li>
@@ -49,132 +50,193 @@
     </button>
   </nav>
 
-  <!-- ============ HERO (full-width sávos képkarusszel) ============ -->
-  <header class="hero" data-hero-carousel>
+  <!-- ============ HERO (állandó sáv-kép — nem váltakozik) ============ -->
+  <header class="hero" aria-label="LipCake Factory — gyerek torta">
+    <h1 class="visually-hidden">LipCake Factory — egyedi gyerek- és mentes torták, Budapest</h1>
     <div class="hero-media">
       <img class="hero-slide is-active"
-           src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8405-Edit-2-1-scaled.jpg"
-           alt="Gyerek dizájn torta — kézzel díszítve" />
-      <img class="hero-slide"
-           src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8028-Edit-2-scaled.jpg"
-           alt="Mentes design torta kompozíció" />
-      <img class="hero-slide"
-           src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8075-Edit-1-scaled.jpg"
-           alt="Pasztell design torta közelről" />
+           src="hero-gyerek.jpg"
+           alt="Kislány fehér ruhában a virágdíszes tortával" />
     </div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <p class="eyebrow hero-eyebrow reveal">LipCake Factory · Budapest</p>
-      <h1 class="display-xxl hero-title reveal delay-1">
-        …egy szelet<br /><em>boldogság.</em>
-      </h1>
-      <p class="lead hero-lead reveal delay-2">
-        Egyedi tortákat alkotok, kizárólag minőségi alapanyagokból, ízfokozók
-        nélkül — a gyerek dizájn és a mentes torták állnak a középpontban.
-      </p>
-      <div class="hero-actions reveal delay-3">
-        <a href="rendeles.html" class="btn">
-          <span>Rendelés indítása</span>
-          <span class="btn-arrow">→</span>
-        </a>
-        <a href="galeria.html" class="btn btn-ghost">
-          <span>Galéria</span>
-        </a>
-      </div>
-    </div>
-    <div class="hero-scroll">Tovább</div>
   </header>
 
-  <!-- ============ KATEGÓRIÁK ============ -->
-  <section class="container">
-    <div class="section-head">
-      <span class="chapter-num reveal">— 01 / kínálat</span>
-      <h2 class="reveal delay-1">Amit <em>kínálok</em></h2>
-    </div>
-
-    <div class="categories">
-      <a href="design-tortak.html" class="cat-card reveal">
-        <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8483-Edit-scaled.jpg"
-             alt="Gyerek dizájn torták" loading="lazy" />
-        <div class="cat-card-overlay">
-          <span class="cat-card-num">i.</span>
-          <h3>Gyerek dizájn torták</h3>
-          <p style="opacity:.9; font-size:.9rem; margin-bottom:1rem;">
-            Szülinap, keresztelő, babaváró — minden alkalomra egyedi.
-          </p>
-          <span class="cat-card-arrow">
-            Megtekintés →
-          </span>
-        </div>
-      </a>
-
-      <a href="izlista.html" class="cat-card reveal delay-1">
-        <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8028-Edit-2-scaled.jpg"
-             alt="Mentes és nyers vegán torták" loading="lazy" />
-        <div class="cat-card-overlay">
-          <span class="cat-card-num">ii.</span>
-          <h3>Mentes &amp; nyers vegán</h3>
-          <p style="opacity:.9; font-size:.9rem; margin-bottom:1rem;">
-            Tej-, cukor-, tojás- és gluténmentes ízek — ízkompromisszum nélkül.
-          </p>
-          <span class="cat-card-arrow">
-            Megtekintés →
-          </span>
-        </div>
-      </a>
-
-      <a href="eskuvoi-tortak.html" class="cat-card reveal delay-2">
-        <img src="https://tortamuhely.com/wp-content/uploads/2022/04/EC2_08081-724x1024.jpg"
-             alt="Esküvői torták" loading="lazy" />
-        <div class="cat-card-overlay">
-          <span class="cat-card-num">iii.</span>
-          <h3>Esküvői torták</h3>
-          <p style="opacity:.9; font-size:.9rem; margin-bottom:1rem;">
-            Naked, burkolt, csipkés — a párotok stílusához igazítva.
-          </p>
-          <span class="cat-card-arrow">
-            Megtekintés →
-          </span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ============ STORY ============ -->
-  <section class="story">
+  <!-- ============ ÜDVÖZLŐ ============ -->
+  <section class="welcome">
     <div class="container">
-      <div class="section-head">
-        <span class="chapter-num reveal">— 02 / a műhely</span>
-        <h2 class="reveal delay-1">Üdvözöllek az <em>oldalamon</em></h2>
-      </div>
-
-      <div class="story-grid">
-        <div class="story-image reveal">
+      <div class="welcome-grid">
+        <div class="welcome-image reveal">
           <img src="https://tortamuhely.com/wp-content/uploads/2024/11/RamiVirtu-504-768x1155.jpg"
-               alt="Keléné Lipka Tímea tortakészítés közben" loading="lazy" />
+               alt="Keléné Lipka Tímea tortája — közelről" loading="lazy" />
         </div>
-        <div class="story-text reveal delay-1">
+        <div class="welcome-text reveal delay-1">
+          <span class="eyebrow">Üdvözöllek az</span>
+          <h2>oldalamon!</h2>
           <p>
-            <strong>Keléné Lipka Timi</strong> vagyok, a LipCake Factory megálmodója
-            és minden sütemény készítője. Egyedi tortákat alkotok, kizárólag
-            minőségi alapanyagokból, ízfokozók nélkül.
+            Lipcake Factory – ahol minden torta …egy szelet Boldogság!
           </p>
           <p>
-            Legszívesebben a gyerek dizájn tortákkal foglalkozom — szülinap,
-            keresztelő, babaváró, eljegyzés vagy bármilyen különleges ünnep —,
-            és nagy hangsúlyt fektetek az ételérzékenyekre is:
-            <em>tej-, cukor-, tojás- és gluténmentes</em>, sőt nyers vegán
-            tortát is készítek.
+            Keléné Lipka Timi vagyok, a műhely megálmodója és minden sütemény
+            készítője. Egyedi tortákat alkotok, kizárólag minőségi alapanyagokból,
+            ízfokozók nélkül.
           </p>
           <p>
-            Újragondolt ízek, mindig frissen, személyre szabva — hogy minden
-            falat igazi meglepetés legyen.
+            Újra gondolt ízek, és cukor-, glutén-, laktóz-, tojásmentes, sőt nyers
+            vegán torták is rendelhetők – mindig frissen, személyre szabva.
           </p>
-
           <span class="signature">
             Timi
             <small>Cukrász · Műhelyvezető</small>
           </span>
+          <div class="welcome-cta">
+            <a href="rendeles.html" class="btn"><span>Rendelés indítása</span><span class="btn-arrow">→</span></a>
+            <a href="galeria.html" class="btn btn-ghost"><span>Galéria</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROFIL-SZEKCIÓK (Gyerek → Mentes → Esküvői) ============ -->
+  <section class="container">
+    <div class="section-head center">
+      <span class="eyebrow reveal">Amit kínálok</span>
+      <h2 class="reveal delay-1">Három <em>történet</em>, egy szenvedély</h2>
+    </div>
+
+    <div class="pillars">
+
+      <!-- 1 · GYEREK TORTÁK (fő profil) -->
+      <article class="pillar reveal">
+        <div class="pillar-media">
+          <div class="p-img p-main">
+            <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8405-Edit-2-1-scaled.jpg"
+                 alt="Gyerek torta — kislány a tortával" loading="lazy" />
+          </div>
+          <div class="p-img p-sub">
+            <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8483-Edit-scaled.jpg"
+                 alt="Egyedi gyerek dizájn torta" loading="lazy" />
+          </div>
+        </div>
+        <div class="pillar-body">
+          <span class="eyebrow">Válaszd te is</span>
+          <h2>Gyerek tortáimat</h2>
+          <p>
+            Nálatok sincs születésnap torta nélkül? Akkor jó helyen jársz! Minden
+            alkalomhoz – legyen az születésnap, keresztelő, babaváró, eljegyzés vagy
+            bármilyen különleges ünnep – személyre szabott, egyedi tortát készítek.
+          </p>
+          <p>
+            A klasszikus ízek mellett gondolok az ételérzékenyekre is: tej-, cukor-,
+            tojás- és gluténmentes, sőt akár nyers vegán torta is rendelhető.
+          </p>
+          <div class="pillar-cta">
+            <a href="gyerek-tortak.html" class="btn"><span>Részletek</span><span class="btn-arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2 · MENTES TORTÁK -->
+      <article class="pillar reverse reveal">
+        <div class="pillar-media">
+          <div class="p-img p-main">
+            <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8028-Edit-2-scaled.jpg"
+                 alt="Mentes design torta" loading="lazy" />
+          </div>
+          <div class="p-img p-sub">
+            <img src="https://tortamuhely.com/wp-content/uploads/2025/08/7FC98979-ADA4-4A16-89F5-ACFAE9091D1F-768x1024.jpg"
+                 alt="Nyers vegán torta szelet" loading="lazy" />
+          </div>
+        </div>
+        <div class="pillar-body">
+          <span class="eyebrow">Válaszd te is</span>
+          <h2>Mentes tortáimat</h2>
+          <p>
+            Nálam mindenkinek jut egy szelet boldogság – kompromisszum nélkül.
+            Tej-, cukor-, tojás- és gluténmentes, sőt nyers vegán torták is
+            rendelhetők, mindig frissen és személyre szabva.
+          </p>
+          <p>
+            A nyers vegán torták kesudió- és datolyaalapúak, glutén- és
+            cukormentesek. Gluténérzékenység esetén a keresztszennyeződés teljes
+            kizárását sajnos nem tudom vállalni.
+          </p>
+          <div class="pillar-cta">
+            <a href="mentes-tortak.html" class="btn"><span>Részletek</span><span class="btn-arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3 · ESKÜVŐI TORTÁK -->
+      <article class="pillar reveal">
+        <div class="pillar-media">
+          <div class="p-img p-main">
+            <img src="https://tortamuhely.com/wp-content/uploads/2023/02/88F0F673-AFC5-409E-B0C6-E0F7084D696B-683x1024.jpeg"
+                 alt="Naked esküvői torta" loading="lazy" />
+          </div>
+          <div class="p-img p-sub">
+            <img src="https://tortamuhely.com/wp-content/uploads/2023/02/8E878F4F-0F26-4FD2-8CFB-ADD89F60E72F-768x512.jpeg"
+                 alt="Kétemeletes esküvői torta" loading="lazy" />
+          </div>
+        </div>
+        <div class="pillar-body">
+          <span class="eyebrow">Válaszd te is</span>
+          <h2>Esküvői tortáimat</h2>
+          <p>
+            A minőségen túl a kinézetre is nagy hangsúlyt fektetek. Tortáim az új
+            trendeket követik, legyen szó naked vagy burkolt tortáról, mindig szem
+            előtt tartva az esküvő és a pár stílusát.
+          </p>
+          <p>
+            <span class="pillar-em">Tej-, cukor-, tojás- és gluténmentes</span>, sőőőt
+            <span class="pillar-em">nyers vegán</span> tortát is vállalok!
+          </p>
+          <div class="pillar-cta">
+            <a href="eskuvoi-tortak.html" class="btn"><span>Részletek</span><span class="btn-arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ MENTES VONAL & HÁZHOZSZÁLLÍTÁS (az esküvői és a 3D tervező között) ============ -->
+  <section class="featurestrip">
+    <div class="container">
+      <div class="feature-head">
+        <span class="eyebrow reveal">Jó tudni</span>
+        <h2 class="reveal delay-1">Amire <em>számíthatsz</em></h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature reveal">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13C4 7 8 3 20 3c0 9-4 17-9 17z"/><path d="M11 20c0-5 2-9 6-12"/></svg>
+          </span>
+          <h3>Mentes vonal</h3>
+          <p>
+            Az ételérzékenység nálam nem akadály: tej-, cukor-, tojás- és
+            gluténmentes, valamint nyers vegán torták is készülnek — ugyanazzal
+            a gondossággal és ízvilággal, mint a többi. Hogy tényleg mindenkinek
+            jusson egy szelet boldogság.
+          </p>
+          <div class="badges">
+            <span class="badge">Cukormentes</span>
+            <span class="badge">Gluténmentes</span>
+            <span class="badge">Laktózmentes</span>
+            <span class="badge">Tojásmentes</span>
+            <span class="badge">Nyers vegán</span>
+          </div>
+        </div>
+        <div class="feature reveal delay-1">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="13" height="10" rx="1"/><path d="M14 8h4l3 3v4h-7z"/><circle cx="5.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg>
+          </span>
+          <h3>Házhozszállítás</h3>
+          <p>
+            Hogy a torta épségben és frissen érkezzen az ünnepre: Budapest és
+            környékén, előzetes egyeztetés alapján házhozszállítást is vállalok —
+            az átvétel a műhelyben is megoldható.
+          </p>
+          <a href="rendeles.html" class="btn-link"><span>Kérdezz rá rendeléskor</span><span>→</span></a>
         </div>
       </div>
     </div>
@@ -184,8 +246,8 @@
   <section class="cake3d-section">
     <div class="container">
       <div class="section-head">
-        <span class="chapter-num reveal">— 03 / interaktív</span>
-        <h2 class="reveal delay-1">Tervezd meg a<br /><em>saját tortád</em></h2>
+        <span class="eyebrow reveal">Interaktív</span>
+        <h2 class="reveal delay-1">Tervezd meg a <em>saját tortád</em></h2>
       </div>
 
       <div class="cake3d-builder">
@@ -279,30 +341,30 @@
   <!-- ============ EDITORIAL GALLERY ============ -->
   <section class="container">
     <div class="section-head">
-      <span class="chapter-num reveal">— 04 / válogatás</span>
+      <span class="eyebrow reveal">Válogatás</span>
       <h2 class="reveal delay-1">A legutóbbi <em>munkák</em></h2>
     </div>
 
     <div class="editorial-grid">
-      <figure class="ed-1 reveal" data-lightbox="https://tortamuhely.com/wp-content/uploads/2022/05/F8B5CEFE-C47D-4DE2-9538-69B8C7A107C7_1_201_a-scaled-1.jpeg">
-        <img src="https://tortamuhely.com/wp-content/uploads/2022/05/F8B5CEFE-C47D-4DE2-9538-69B8C7A107C7_1_201_a-scaled-1-330x230.jpeg"
-             alt="Csipkés cukorvirágos torta" loading="lazy" />
-        <figcaption>Csipkés-cukorvirágos torta</figcaption>
+      <figure class="ed-1 reveal" data-lightbox="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8405-Edit-2-1-scaled.jpg">
+        <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8405-Edit-2-1-scaled.jpg"
+             alt="Gyerek torta részlet" loading="lazy" />
+        <figcaption>Gyerek torta</figcaption>
       </figure>
       <figure class="ed-2 reveal delay-1" data-lightbox="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8075-Edit-1-scaled.jpg">
         <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8075-Edit-1-330x230.jpg"
              alt="Modern design torta" loading="lazy" />
         <figcaption>Pasztell modern</figcaption>
       </figure>
-      <figure class="ed-3 reveal delay-2" data-lightbox="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8405-Edit-2-1-scaled.jpg">
-        <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8405-Edit-2-1-scaled.jpg"
-             alt="Gyerek dizájn torta részlet" loading="lazy" />
-        <figcaption>Gyerek dizájn torta</figcaption>
-      </figure>
-      <figure class="ed-4 reveal" data-lightbox="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8028-Edit-2-scaled.jpg">
+      <figure class="ed-3 reveal delay-2" data-lightbox="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8028-Edit-2-scaled.jpg">
         <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8028-Edit-2-scaled.jpg"
              alt="Mentes design torta kompozíció" loading="lazy" />
         <figcaption>Mentes kompozíció</figcaption>
+      </figure>
+      <figure class="ed-4 reveal" data-lightbox="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8483-Edit-scaled.jpg">
+        <img src="https://tortamuhely.com/wp-content/uploads/2025/08/A7_8483-Edit-scaled.jpg"
+             alt="Cukorvirágos torta" loading="lazy" />
+        <figcaption>Cukorvirág</figcaption>
       </figure>
       <figure class="ed-5 reveal delay-1" data-lightbox="https://tortamuhely.com/wp-content/uploads/2023/02/8E878F4F-0F26-4FD2-8CFB-ADD89F60E72F-scaled.jpeg">
         <img src="https://tortamuhely.com/wp-content/uploads/2023/02/8E878F4F-0F26-4FD2-8CFB-ADD89F60E72F-768x512.jpeg"
@@ -328,7 +390,7 @@
   <section class="testimonials">
     <div class="container">
       <div class="section-head">
-        <span class="chapter-num reveal" style="color: var(--rose-soft);">— 05 / vélemények</span>
+        <span class="eyebrow reveal" style="color: var(--rose-soft);">Vélemények</span>
         <h2 class="reveal delay-1">Rólam <em>mondták</em></h2>
       </div>
 
@@ -374,14 +436,14 @@
   <!-- ============ CTA BANNER ============ -->
   <section class="cta-banner">
     <div class="container narrow">
-      <span class="chapter-num reveal">— 06 / következő lépés</span>
+      <span class="eyebrow reveal">Foglalás</span>
       <h2 class="reveal delay-1">
         Foglald le a<br />
         <em>dátumotokat.</em>
       </h2>
       <p class="reveal delay-2">
-        Kérlek, leadnád a rendelést legalább 2–4 héttel a kitűzött nap előtt,
-        hogy biztosan a maximumot adhassam.
+        Rendelésedet kérlek minimum 2 héttel előre add le, hogy biztosan
+        legyen kapacitásom rá, és a maximumot adhassam.
       </p>
       <div class="reveal delay-3">
         <a href="rendeles.html" class="btn">
@@ -409,7 +471,8 @@
         <div class="footer-col">
           <h4>Műhely</h4>
           <ul>
-            <li><a href="design-tortak.html">Design torták</a></li>
+            <li><a href="gyerek-tortak.html">Gyerek torták</a></li>
+            <li><a href="mentes-tortak.html">Mentes torták</a></li>
             <li><a href="eskuvoi-tortak.html">Esküvői torták</a></li>
             <li><a href="izlista.html">Ízek</a></li>
             <li><a href="galeria.html">Galéria</a></li>
@@ -441,7 +504,7 @@
       <div class="footer-bottom">
         <span>© 2026 LipCake Factory · Minden jog fenntartva</span>
         <span>
-          <a href="adatkezeles.html">Adatkezelési</a> · <a href="aszf.html">ÁSZF</a> · 
+          <a href="adatkezeles.html">Adatkezelési</a> · <a href="aszf.html">ÁSZF</a> ·
           <a href="https://aimpress.vibepreview.com" target="_blank" rel="noopener">
             Készítette: AImpress
           </a>
