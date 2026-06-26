@@ -465,7 +465,7 @@ section { padding: clamp(4rem, 10vw, 9rem) 0; position: relative; }
    tortamuhely.com stílusában: nincs sötétítés/szöveg a képen, a szöveg a kép alá kerül. */
 .hero {
   position: relative;
-  height: clamp(460px, 82vh, 840px);
+  height: clamp(420px, 74vh, 760px);
   overflow: hidden;
   background: var(--whisper);
 }
@@ -484,7 +484,7 @@ section { padding: clamp(4rem, 10vw, 9rem) 0; position: relative; }
 .hero-media .hero-slide.is-active { opacity: 1; transform: scale(1.0); z-index: 1; }
 
 @media (max-width: 900px) {
-  .hero { height: clamp(320px, 62vh, 600px); }
+  .hero { height: clamp(280px, 54vh, 520px); }
 }
 
 /* Vizuálisan rejtett, de képernyőolvasónak/SEO-nak megmaradó cím */
