@@ -2777,6 +2777,25 @@ input[type="range"].cp-slider::-moz-range-thumb {
 .sum-total > span:last-child { font-size: 1.5rem; color: var(--burgundy); }
 .sum-note { font-size: 0.8rem; font-style: italic; opacity: 0.72; margin-top: 1rem; }
 
+/* Kóstoló box íz-választó (kinyíló) */
+.kostolo-picker {
+  margin-top: 0.5rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px dashed var(--rose-soft);
+  background: var(--ivory);
+}
+.kostolo-picker[hidden] { display: none; }
+[data-kostolo-count] { text-transform: none; letter-spacing: 0; font-style: italic; color: var(--rose-deep); }
+
+/* Referencia kép feltöltés */
+input[type="file"] {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  padding: 0.6rem 0;
+  width: 100%;
+}
+.ref-files { display: block; margin-top: 0.5rem; font-size: 0.85rem; font-style: italic; opacity: 0.7; }
+
 @media (max-width: 900px) {
   .shop-layout { grid-template-columns: 1fr; }
   .shop-summary { position: static; order: 2; margin-top: 2.5rem; }

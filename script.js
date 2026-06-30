@@ -157,8 +157,13 @@
     const DELIVLABEL = { atvetel:'Átvétel a műhelyben', budapest:'Szállítás – Budapest', kornyek:'Szállítás – környék' };
     const KOSTOLO    = 12000;
 
-    const state = { step:1, cat:null, size:null, flavors:[], allergens:[], extras:{diszites:false, kostolo:false}, delivery:null, date:null, data:{} };
-    const fmt = (n) => n.toLocaleString('hu-HU') + ' Ft';
+    const FEE_RATE   = 0.03;
+
+    const state = { step:1, cat:null, size:null, flavors:[], allergens:[], extras:{diszites:false, kostolo:false}, kostoloFlavors:[], refFiles:[], delivery:null, date:null, data:{} };
+    const fmt = (n) => Math.round(n).toLocaleString('hu-HU') + ' Ft';
+
+    // Hány íz választható? Emeletes (Design) = 2 emelet → 2 íz; egyébként 1.
+    const maxFlavors = () => (state.cat === 'design' && state.size === 'emeletes') ? 2 : 1;
 
     // ----- Kategória -----
     const catBtns = root.querySelectorAll('[data-cat]');
@@ -167,6 +172,7 @@
       b.classList.add('selected');
       state.cat = b.dataset.cat;
       refreshSizes();
+      syncFlavors();
       render();
     }));
 
@@ -191,14 +197,32 @@
       sizeBtns.forEach(x => x.classList.remove('selected'));
       b.classList.add('selected');
       state.size = b.dataset.size;
+      syncFlavors();
       render();
     }));
 
-    // ----- Ízek -----
-    root.querySelectorAll('[data-flavors] input').forEach(i => i.addEventListener('change', () => {
-      state.flavors = Array.from(root.querySelectorAll('[data-flavors] input:checked')).map(x => x.value);
+    // ----- Ízek (1 íz / torta — emeletesnél annyi, ahány emelet) -----
+    const flavorInputs = root.querySelectorAll('[data-flavors] input');
+    flavorInputs.forEach(i => i.addEventListener('change', () => {
+      const max = maxFlavors();
+      if (i.checked && max === 1) {
+        flavorInputs.forEach(x => { if (x !== i) x.checked = false; });
+      } else if (i.checked) {
+        if (root.querySelectorAll('[data-flavors] input:checked').length > max) {
+          i.checked = false; flash('Ehhez a tortához max ' + max + ' íz választható');
+        }
+      }
+      syncFlavors();
       render();
     }));
+    function syncFlavors() {
+      const max = maxFlavors();
+      let checked = Array.from(root.querySelectorAll('[data-flavors] input:checked'));
+      while (checked.length > max) { checked[checked.length - 1].checked = false; checked.pop(); }
+      state.flavors = checked.map(x => x.value);
+      const hint = root.querySelector('[data-flavor-hint]');
+      if (hint) hint.textContent = max > 1 ? '(válassz max ' + max + ' ízt — annyi, ahány emelet)' : '(1 íz választható)';
+    }
 
     // ----- Mentes igények -----
     root.querySelectorAll('[data-allergen]').forEach(i => i.addEventListener('change', () => {
@@ -207,12 +231,43 @@
       render();
     }));
 
-    // ----- Extrák -----
+    // ----- Extrák (a kóstoló box kinyitja az 5-íz választót) -----
     root.querySelectorAll('[data-extra]').forEach(i => i.addEventListener('change', () => {
       i.closest('.opt-row').classList.toggle('checked', i.checked);
       state.extras[i.dataset.extra] = i.checked;
+      if (i.dataset.extra === 'kostolo') {
+        const picker = root.querySelector('[data-kostolo-picker]');
+        if (picker) picker.hidden = !i.checked;
+        if (!i.checked) {
+          root.querySelectorAll('[data-kostolo-flavors] input:checked').forEach(x => x.checked = false);
+          state.kostoloFlavors = [];
+          updateKostoloCount();
+        }
+      }
       render();
     }));
+
+    // ----- Kóstoló box ízek (max 5) -----
+    root.querySelectorAll('[data-kostolo-flavors] input').forEach(i => i.addEventListener('change', () => {
+      if (i.checked && root.querySelectorAll('[data-kostolo-flavors] input:checked').length > 5) {
+        i.checked = false; flash('Maximum 5 ízt választhatsz a kóstolóhoz');
+      }
+      state.kostoloFlavors = Array.from(root.querySelectorAll('[data-kostolo-flavors] input:checked')).map(x => x.value);
+      updateKostoloCount();
+      render();
+    }));
+    function updateKostoloCount() {
+      const c = root.querySelector('[data-kostolo-count]');
+      if (c) c.textContent = '(' + state.kostoloFlavors.length + '/5)';
+    }
+
+    // ----- Referencia képek -----
+    const refInput = root.querySelector('[data-ref-input]');
+    if (refInput) refInput.addEventListener('change', () => {
+      state.refFiles = Array.from(refInput.files).map(f => f.name);
+      const el = root.querySelector('[data-ref-files]');
+      if (el) el.textContent = state.refFiles.length ? state.refFiles.join(', ') : '';
+    });
 
     // ----- Szállítás -----
     root.querySelectorAll('[data-delivery-opt]').forEach(i => i.addEventListener('change', () => {
@@ -234,10 +289,25 @@
       }
       const deliv = state.delivery ? DELIVERY[state.delivery] : 0;
       const kost = state.extras.kostolo ? KOSTOLO : 0;
-      return { base, allerg, deliv, kost, total: base + allerg + deliv + kost };
+      const price = base + allerg + deliv + kost;          // fix ár
+      const isDelivery = (state.delivery === 'budapest' || state.delivery === 'kornyek');
+      const hasPay = !!state.delivery;
+      let fee = 0, now = 0, rest = 0, total = price;
+      if (isDelivery) {
+        // a teljes összeget a webshopban (linken) fizeti → 3% az egészen
+        fee = Math.round(price * FEE_RATE);
+        now = price + fee; rest = 0; total = now;
+      } else if (state.delivery === 'atvetel') {
+        // 50% foglalót fizet a webshopban (+3%), a maradék 50% átvételkor díjmentes
+        const deposit = Math.round(price * 0.5);
+        fee = Math.round(deposit * FEE_RATE);
+        now = deposit + fee; rest = price - deposit; total = now + rest;
+      }
+      return { base, allerg, deliv, kost, price, isDelivery, hasPay, fee, now, rest, total };
     }
 
     const setText = (sel, txt) => { const e = root.querySelector(sel); if (e) e.textContent = txt; };
+    const showRow = (sel, on) => { const e = root.querySelector(sel); if (e) e.style.display = on ? '' : 'none'; };
 
     function render() {
       setText('[data-s-cat]', state.cat ? CATLABEL[state.cat] : '—');
@@ -252,23 +322,43 @@
 
       const ex = [];
       if (state.extras.diszites) ex.push('extra díszítés');
-      if (state.extras.kostolo) ex.push('kóstoló box');
-      setText('[data-s-extra]', ex.length ? ex.join(', ') : '—');
+      if (state.extras.kostolo) ex.push('kóstoló box' + (state.kostoloFlavors.length ? ' (' + state.kostoloFlavors.join(', ') + ')' : ''));
+      setText('[data-s-extra]', ex.length ? ex.join('; ') : '—');
 
       setText('[data-s-delivery]', state.delivery ? DELIVLABEL[state.delivery] : '—');
       setText('[data-s-date]', state.date ? formatDate(state.date) : '—');
 
       const c = calc();
-      const totalEl = root.querySelector('[data-s-total]');
-      const noteEl = root.querySelector('[data-s-extranote]');
-      if (noteEl) noteEl.textContent = '';
-      if (totalEl) {
-        if (!c) totalEl.textContent = '—';
-        else if (c.egyedi) totalEl.textContent = 'Egyedi ajánlat';
-        else {
-          totalEl.textContent = fmt(c.total);
-          if (state.extras.diszites && noteEl) noteEl.textContent = '+ az extra díszítés ára egyedi, egyeztetés alapján.';
-          else if (inclusive && state.allergens.length && noteEl) noteEl.textContent = 'A mentes kivitel ára benne van az alapárban.';
+      const extranote = root.querySelector('[data-s-extranote]');
+      const paynote = root.querySelector('[data-s-paynote]');
+      if (extranote) extranote.textContent = '';
+      if (paynote) paynote.textContent = '';
+
+      if (!c) {
+        setText('[data-s-subtotal]', '—'); setText('[data-s-fee]', '—'); setText('[data-s-total]', '—');
+        setText('[data-s-now]', '—'); showRow('[data-rest-row]', false);
+      } else if (c.egyedi) {
+        setText('[data-s-subtotal]', '—'); setText('[data-s-fee]', '—'); setText('[data-s-total]', 'Egyedi ajánlat');
+        setText('[data-s-now]', '—'); showRow('[data-rest-row]', false);
+        if (paynote) paynote.textContent = 'Az esküvői torta és a kiszállítás egyedi árazású — a pontos árat e-mailben küldöm.';
+      } else {
+        setText('[data-s-subtotal]', fmt(c.price));
+        if (state.extras.diszites && extranote) extranote.textContent = '+ az extra díszítés ára egyedi, egyeztetés alapján.';
+        else if (inclusive && state.allergens.length && extranote) extranote.textContent = 'A mentes kivitel ára benne van az alapárban.';
+
+        if (!c.hasPay) {
+          setText('[data-s-fee]', '—'); setText('[data-s-total]', fmt(c.price));
+          setText('[data-s-now]', '—'); showRow('[data-rest-row]', false);
+          if (paynote) paynote.textContent = 'Válassz átvételi vagy szállítási módot a fizetéshez.';
+        } else if (c.isDelivery) {
+          setText('[data-s-fee]', fmt(c.fee)); setText('[data-s-total]', fmt(c.total));
+          setText('[data-s-now]', fmt(c.now)); showRow('[data-rest-row]', false);
+          if (paynote) paynote.textContent = 'Kiszállításnál a teljes összeget a webshopban fizeted (linken) — ezen van a 3% díj.';
+        } else {
+          setText('[data-s-fee]', fmt(c.fee)); setText('[data-s-total]', fmt(c.total));
+          setText('[data-s-now]', fmt(c.now));
+          setText('[data-s-rest]', fmt(c.rest)); showRow('[data-rest-row]', true);
+          if (paynote) paynote.textContent = 'Átvételnél 50% foglalót fizetsz a webshopban (ezen van a 3% díj), a maradék 50% átvételkor — azon nincs díj.';
         }
       }
     }
@@ -294,6 +384,7 @@
       if (n === 1) {
         if (!state.cat) { flash('Válassz kategóriát'); return false; }
         if (state.cat !== 'eskuvoi' && !state.size) { flash('Válassz méretet'); return false; }
+        if (!state.flavors.length) { flash('Válassz legalább egy ízt'); return false; }
       }
       if (n === 3 && !state.date) { flash('Válassz egy szabad dátumot a naptárból'); return false; }
       return true;
@@ -312,9 +403,10 @@
     function showThankYou() {
       const panel = panels[panels.length - 1];
       const c = calc();
-      const priceLine = (c && !c.egyedi)
-        ? 'Becsült összeg: <strong>' + fmt(c.total) + '</strong>'
-        : 'A pontos árajánlatot e-mailben küldöm.';
+      let priceLine;
+      if (c && !c.egyedi && c.hasPay) priceLine = 'Végösszeg: <strong>' + fmt(c.total) + '</strong><br />Fizetendő most (linken): <strong>' + fmt(c.now) + '</strong>';
+      else if (c && !c.egyedi) priceLine = 'Ár: <strong>' + fmt(c.price) + '</strong>';
+      else priceLine = 'A pontos árajánlatot e-mailben küldöm.';
       panel.innerHTML =
         '<div class="text-center" style="padding: 2rem 0;">' +
         '<h2 class="display-l">Köszönöm a <em>rendelést!</em></h2>' +
@@ -340,6 +432,7 @@
 
     initCalendar(root, state, render);
     refreshSizes();
+    syncFlavors();
     render();
   }
 

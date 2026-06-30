@@ -87,7 +87,7 @@
             <button type="button" data-size="emeletes"><strong>24 szeletes</strong><small>vagy emeletes</small><span class="size-price">—</span></button>
           </div>
 
-          <p class="field-label">Ízek <small>(válassz egy vagy több ízt)</small></p>
+          <p class="field-label">Ízek <small data-flavor-hint>(1 íz választható)</small></p>
           <div class="checkbox-group" data-flavors>
             <span class="checkbox-pill"><input id="fl1" type="checkbox" value="Pisztácia–málna" /><label for="fl1">Pisztácia–málna</label></span>
             <span class="checkbox-pill"><input id="fl2" type="checkbox" value="Belga csoki–sós karamell" /><label for="fl2">Belga csoki–sós karamell</label></span>
@@ -129,10 +129,30 @@
             <label class="opt-row"><input type="checkbox" data-extra="kostolo" /><span class="opt-name">Kóstoló box (2 fő, 5 íz)<small>4 sima + 1 mentes</small></span><span class="opt-price">+12 000 Ft</span></label>
           </div>
 
+          <div class="kostolo-picker" data-kostolo-picker hidden>
+            <p class="field-label" style="margin-top:0;">Válaszd ki az 5 kóstoló ízt <small data-kostolo-count>(0/5)</small></p>
+            <div class="checkbox-group" data-kostolo-flavors>
+              <span class="checkbox-pill"><input id="kfl1" type="checkbox" value="Pisztácia–málna" /><label for="kfl1">Pisztácia–málna</label></span>
+              <span class="checkbox-pill"><input id="kfl2" type="checkbox" value="Belga csoki–sós karamell" /><label for="kfl2">Belga csoki–sós karamell</label></span>
+              <span class="checkbox-pill"><input id="kfl3" type="checkbox" value="Vanília–fehércsoki–eper" /><label for="kfl3">Vanília–fehércsoki–eper</label></span>
+              <span class="checkbox-pill"><input id="kfl4" type="checkbox" value="Csokoládé–meggy" /><label for="kfl4">Csokoládé–meggy</label></span>
+              <span class="checkbox-pill"><input id="kfl5" type="checkbox" value="Citrom–lemon curd" /><label for="kfl5">Citrom–lemon curd</label></span>
+              <span class="checkbox-pill"><input id="kfl6" type="checkbox" value="Sós karamell" /><label for="kfl6">Sós karamell</label></span>
+              <span class="checkbox-pill"><input id="kfl7" type="checkbox" value="Somlói" /><label for="kfl7">Somlói</label></span>
+              <span class="checkbox-pill"><input id="kfl8" type="checkbox" value="Túró–eper" /><label for="kfl8">Túró–eper</label></span>
+              <span class="checkbox-pill"><input id="kfl9" type="checkbox" value="Tripla csoki" /><label for="kfl9">Tripla csoki</label></span>
+              <span class="checkbox-pill"><input id="kfl10" type="checkbox" value="Kinder bueno" /><label for="kfl10">Kinder bueno</label></span>
+              <span class="checkbox-pill"><input id="kfl11" type="checkbox" value="Tejcsoki–mascarpone" /><label for="kfl11">Tejcsoki–mascarpone</label></span>
+              <span class="checkbox-pill"><input id="kfl12" type="checkbox" value="Répatorta" /><label for="kfl12">Répatorta</label></span>
+              <span class="checkbox-pill"><input id="kfl13" type="checkbox" value="Erdei gyümölcs" /><label for="kfl13">Erdei gyümölcs</label></span>
+              <span class="checkbox-pill"><input id="kfl14" type="checkbox" value="Mentes íz" /><label for="kfl14">Mentes íz</label></span>
+            </div>
+          </div>
+
           <p class="field-label">Átvétel / szállítás</p>
           <div class="opt-list" data-delivery>
             <label class="opt-row"><input type="radio" name="delivery" data-delivery-opt="atvetel" /><span class="opt-name">Átvétel a műhelyben<small>1203 Budapest, Vízisport u. 23/E.</small></span><span class="opt-price">0 Ft</span></label>
-            <label class="opt-row"><input type="radio" name="delivery" data-delivery-opt="budapest" /><span class="opt-name">Házhozszállítás – Budapest<small>esküvői torta: 25 000 Ft</small></span><span class="opt-price">5 500 Ft</span></label>
+            <label class="opt-row"><input type="radio" name="delivery" data-delivery-opt="budapest" /><span class="opt-name">Házhozszállítás – Budapest<small>esküvői: egyedi árazás</small></span><span class="opt-price">5 500 Ft</span></label>
             <label class="opt-row"><input type="radio" name="delivery" data-delivery-opt="kornyek" /><span class="opt-name">Házhozszállítás – Budapest környéke<small>esküvői: egyedi árazás</small></span><span class="opt-price">6 500 Ft</span></label>
           </div>
 
@@ -197,6 +217,11 @@
               <label for="message">Elképzelés / preferenciák</label>
               <textarea id="message" name="message" placeholder="Stílus, szín, téma, figura, Pinterest link — bármi, ami segít megálmodni a tortát..."></textarea>
             </div>
+            <div class="form-field full">
+              <label for="refimg">Referencia képek <small style="text-transform:none; letter-spacing:0; font-style:italic; opacity:.7;">(opcionális — milyen tortát szeretnél)</small></label>
+              <input id="refimg" name="refimg" type="file" accept="image/*" multiple data-ref-input />
+              <span class="ref-files" data-ref-files></span>
+            </div>
           </div>
 
           <div class="step-nav">
@@ -216,11 +241,15 @@
         <div class="sum-line"><span>Extrák</span><span data-s-extra>—</span></div>
         <div class="sum-line"><span>Szállítás</span><span data-s-delivery>—</span></div>
         <div class="sum-line"><span>Dátum</span><span data-s-date>—</span></div>
-        <div class="sum-total"><span>Becsült összeg</span><span data-s-total>—</span></div>
+        <div class="sum-line"><span>Ár</span><span data-s-subtotal>—</span></div>
+        <div class="sum-line"><span>Online díj 3%</span><span data-s-fee>—</span></div>
+        <div class="sum-total"><span>Végösszeg</span><span data-s-total>—</span></div>
+        <div class="sum-line" style="border-bottom:none; padding-top:0.7rem;"><span>Fizetendő most</span><span data-s-now>—</span></div>
+        <div class="sum-line" data-rest-row style="display:none; border-bottom:none; padding-top:0;"><span>Átvételkor</span><span data-s-rest>—</span></div>
         <p class="sum-note" data-s-extranote></p>
+        <p class="sum-note" data-s-paynote></p>
         <p class="sum-note">
-          Tájékoztató ár. A pontos árat és a foglalót (a teljes ár 50%-a)
-          e-mailben igazolom vissza 24 órán belül.
+          A feltüntetett ár fix; az esküvői torta egyedi árazású. A megrendelést e-mailben visszaigazolom.
         </p>
       </aside>
     </div>
