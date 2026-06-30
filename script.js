@@ -135,17 +135,143 @@
   if (orderRoot) initOrderFlow(orderRoot);
 
   function initOrderFlow(root) {
-    const steps      = root.querySelectorAll('.step');
-    const panels     = root.querySelectorAll('.step-panel');
-    const nextBtns   = root.querySelectorAll('[data-next]');
-    const prevBtns   = root.querySelectorAll('[data-prev]');
-    const productOpts= root.querySelectorAll('.product-option');
-    const state = {
-      step: 1,
-      product: null,
-      date: null,
-      data: {}
+    const steps    = root.querySelectorAll('.stepper .step');
+    const panels   = root.querySelectorAll('.step-panel');
+    const nextBtns = root.querySelectorAll('[data-next]');
+    const prevBtns = root.querySelectorAll('[data-prev]');
+
+    // ----- Árak (a kitöltött árlista alapján) -----
+    const PRICES = {
+      design:  { 12: 26400, 16: 33600, 20: 42000, emeletes: 50400 },
+      mousse:  { 12: 21500, 16: 27200, 20: 34000, emeletes: 40800 },
+      mentes:  { 12: 25200, 16: 31200, 20: 39000, emeletes: 46800 },
+      vegan:   { 12: 25200, 16: 31200, 20: 39000, emeletes: 46800 },
+      eskuvoi: null
     };
+    const CATLABEL   = { design:'Design / gyerek torta', mousse:'Mousse torta', mentes:'Mentes torta', vegan:'Nyers vegán torta', eskuvoi:'Esküvői torta' };
+    const SIZELABEL  = { 12:'12 szeletes', 16:'16 szeletes', 20:'20 szeletes', emeletes:'24 szeletes / emeletes' };
+    const SLICES     = { 12:12, 16:16, 20:20, emeletes:24 };
+    const SURCH      = { gluten:350, laktoz:250, cukor:350, tojas:350 };
+    const ALLERGLABEL= { gluten:'Gluténmentes', laktoz:'Laktózmentes', cukor:'Cukormentes', tojas:'Tojásmentes' };
+    const DELIVERY   = { atvetel:0, budapest:5500, kornyek:6500 };
+    const DELIVLABEL = { atvetel:'Átvétel a műhelyben', budapest:'Szállítás – Budapest', kornyek:'Szállítás – környék' };
+    const KOSTOLO    = 12000;
+
+    const state = { step:1, cat:null, size:null, flavors:[], allergens:[], extras:{diszites:false, kostolo:false}, delivery:null, date:null, data:{} };
+    const fmt = (n) => n.toLocaleString('hu-HU') + ' Ft';
+
+    // ----- Kategória -----
+    const catBtns = root.querySelectorAll('[data-cat]');
+    catBtns.forEach(b => b.addEventListener('click', () => {
+      catBtns.forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      state.cat = b.dataset.cat;
+      refreshSizes();
+      render();
+    }));
+
+    // ----- Méret -----
+    const sizeBtns = root.querySelectorAll('[data-size]');
+    function refreshSizes() {
+      sizeBtns.forEach(b => {
+        const sz = b.dataset.size, pe = b.querySelector('.size-price');
+        if (!state.cat) { pe.textContent = '—'; b.disabled = false; return; }
+        if (state.cat === 'eskuvoi') { pe.textContent = 'egyedi'; b.disabled = false; return; }
+        const p = PRICES[state.cat][sz];
+        if (p == null) {
+          pe.textContent = 'nem kérhető';
+          b.disabled = true;
+          b.classList.remove('selected');
+          if (state.size === sz) state.size = null;
+        } else { pe.textContent = fmt(p); b.disabled = false; }
+      });
+    }
+    sizeBtns.forEach(b => b.addEventListener('click', () => {
+      if (b.disabled) return;
+      sizeBtns.forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      state.size = b.dataset.size;
+      render();
+    }));
+
+    // ----- Ízek -----
+    root.querySelectorAll('[data-flavors] input').forEach(i => i.addEventListener('change', () => {
+      state.flavors = Array.from(root.querySelectorAll('[data-flavors] input:checked')).map(x => x.value);
+      render();
+    }));
+
+    // ----- Mentes igények -----
+    root.querySelectorAll('[data-allergen]').forEach(i => i.addEventListener('change', () => {
+      i.closest('.opt-row').classList.toggle('checked', i.checked);
+      state.allergens = Array.from(root.querySelectorAll('[data-allergen]:checked')).map(x => x.dataset.allergen);
+      render();
+    }));
+
+    // ----- Extrák -----
+    root.querySelectorAll('[data-extra]').forEach(i => i.addEventListener('change', () => {
+      i.closest('.opt-row').classList.toggle('checked', i.checked);
+      state.extras[i.dataset.extra] = i.checked;
+      render();
+    }));
+
+    // ----- Szállítás -----
+    root.querySelectorAll('[data-delivery-opt]').forEach(i => i.addEventListener('change', () => {
+      root.querySelectorAll('[data-delivery-opt]').forEach(x => x.closest('.opt-row').classList.remove('checked'));
+      i.closest('.opt-row').classList.add('checked');
+      state.delivery = i.dataset.deliveryOpt;
+      render();
+    }));
+
+    function calc() {
+      if (!state.cat || !state.size) return null;
+      if (state.cat === 'eskuvoi') return { egyedi: true };
+      const base = PRICES[state.cat][state.size];
+      if (base == null) return null;
+      const slices = SLICES[state.size];
+      let allerg = 0;
+      if (state.cat === 'design' || state.cat === 'mousse') {
+        state.allergens.forEach(a => { allerg += (SURCH[a] || 0) * slices; });
+      }
+      const deliv = state.delivery ? DELIVERY[state.delivery] : 0;
+      const kost = state.extras.kostolo ? KOSTOLO : 0;
+      return { base, allerg, deliv, kost, total: base + allerg + deliv + kost };
+    }
+
+    const setText = (sel, txt) => { const e = root.querySelector(sel); if (e) e.textContent = txt; };
+
+    function render() {
+      setText('[data-s-cat]', state.cat ? CATLABEL[state.cat] : '—');
+      setText('[data-s-size]', state.size ? SIZELABEL[state.size] : '—');
+      setText('[data-s-flavors]', state.flavors.length ? state.flavors.join(', ') : '—');
+
+      const inclusive = (state.cat === 'mentes' || state.cat === 'vegan');
+      let allergText = '—';
+      if (state.allergens.length) allergText = state.allergens.map(a => ALLERGLABEL[a]).join(', ');
+      else if (inclusive) allergText = 'alapból mentes';
+      setText('[data-s-allergen]', allergText);
+
+      const ex = [];
+      if (state.extras.diszites) ex.push('extra díszítés');
+      if (state.extras.kostolo) ex.push('kóstoló box');
+      setText('[data-s-extra]', ex.length ? ex.join(', ') : '—');
+
+      setText('[data-s-delivery]', state.delivery ? DELIVLABEL[state.delivery] : '—');
+      setText('[data-s-date]', state.date ? formatDate(state.date) : '—');
+
+      const c = calc();
+      const totalEl = root.querySelector('[data-s-total]');
+      const noteEl = root.querySelector('[data-s-extranote]');
+      if (noteEl) noteEl.textContent = '';
+      if (totalEl) {
+        if (!c) totalEl.textContent = '—';
+        else if (c.egyedi) totalEl.textContent = 'Egyedi ajánlat';
+        else {
+          totalEl.textContent = fmt(c.total);
+          if (state.extras.diszites && noteEl) noteEl.textContent = '+ az extra díszítés ára egyedi, egyeztetés alapján.';
+          else if (inclusive && state.allergens.length && noteEl) noteEl.textContent = 'A mentes kivitel ára benne van az alapárban.';
+        }
+      }
+    }
 
     const goTo = (n) => {
       if (n < 1 || n > steps.length) return;
@@ -155,8 +281,7 @@
         s.classList.toggle('completed', i + 1 < n);
       });
       panels.forEach((p, i) => p.classList.toggle('active', i + 1 === n));
-      window.scrollTo({ top: root.offsetTop - 80, behavior: 'smooth' });
-      if (n === 4) updateSummary();
+      window.scrollTo({ top: root.offsetTop - 90, behavior: 'smooth' });
     };
 
     nextBtns.forEach(b => b.addEventListener('click', () => {
@@ -165,35 +290,38 @@
     }));
     prevBtns.forEach(b => b.addEventListener('click', () => goTo(state.step - 1)));
 
-    productOpts.forEach(opt => {
-      opt.addEventListener('click', () => {
-        productOpts.forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        state.product = opt.dataset.product;
-      });
-    });
-
     function validateStep(n) {
-      if (n === 1 && !state.product) {
-        flash('Válassz egy terméktípust a folytatáshoz');
-        return false;
+      if (n === 1) {
+        if (!state.cat) { flash('Válassz kategóriát'); return false; }
+        if (state.cat !== 'eskuvoi' && !state.size) { flash('Válassz méretet'); return false; }
       }
-      if (n === 2 && !state.date) {
-        flash('Válassz egy szabad dátumot a naptárból');
-        return false;
-      }
-      if (n === 3) {
-        const required = root.querySelectorAll('[data-required]');
-        for (const f of required) {
-          if (!f.value.trim()) {
-            f.focus();
-            flash('Töltsd ki a kötelező mezőket');
-            return false;
-          }
-        }
-        required.forEach(f => state.data[f.name] = f.value);
-      }
+      if (n === 3 && !state.date) { flash('Válassz egy szabad dátumot a naptárból'); return false; }
       return true;
+    }
+
+    // ----- Rendelés elküldése -----
+    root.querySelectorAll('[data-submit]').forEach(b => b.addEventListener('click', () => {
+      const required = root.querySelectorAll('[data-required]');
+      for (const f of required) {
+        if (!f.value.trim()) { f.focus(); flash('Töltsd ki a kötelező mezőket'); return; }
+      }
+      required.forEach(f => state.data[f.name] = f.value);
+      showThankYou();
+    }));
+
+    function showThankYou() {
+      const panel = panels[panels.length - 1];
+      const c = calc();
+      const priceLine = (c && !c.egyedi)
+        ? 'Becsült összeg: <strong>' + fmt(c.total) + '</strong>'
+        : 'A pontos árajánlatot e-mailben küldöm.';
+      panel.innerHTML =
+        '<div class="text-center" style="padding: 2rem 0;">' +
+        '<h2 class="display-l">Köszönöm a <em>rendelést!</em></h2>' +
+        '<p class="lead" style="margin: 1.2rem auto; max-width: 46ch;">Legkésőbb 24 órán belül e-mailben jelentkezem a visszaigazolással és a pontos ajánlattal.</p>' +
+        '<p style="margin-top: 1rem;">' + priceLine + '</p>' +
+        '</div>';
+      window.scrollTo({ top: root.offsetTop - 90, behavior: 'smooth' });
     }
 
     function flash(msg) {
@@ -210,23 +338,9 @@
       t._tm = setTimeout(() => { t.style.opacity = '0'; }, 2600);
     }
 
-    // ----- Calendar -----
-    initCalendar(root, state);
-
-    function updateSummary() {
-      const productLabel = {
-        wedding:  'Esküvői torta',
-        birthday: 'Születésnapi torta',
-        allergy:  'Mentes torta',
-        other:    'Egyedi torta'
-      }[state.product] || '—';
-      const sumProd = root.querySelector('[data-sum-product]');
-      const sumDate = root.querySelector('[data-sum-date]');
-      const sumName = root.querySelector('[data-sum-name]');
-      if (sumProd) sumProd.textContent = productLabel;
-      if (sumDate) sumDate.textContent = state.date ? formatDate(state.date) : '—';
-      if (sumName) sumName.textContent = state.data.name || '—';
-    }
+    initCalendar(root, state, render);
+    refreshSizes();
+    render();
   }
 
   function formatDate(d) {
@@ -235,7 +349,7 @@
     return `${d.getFullYear()}. ${months[d.getMonth()]} ${d.getDate()}.`;
   }
 
-  function initCalendar(root, state) {
+  function initCalendar(root, state, onChange) {
     const cal = root.querySelector('.calendar');
     if (!cal) return;
 
@@ -305,6 +419,7 @@
             grid.querySelectorAll('.cal-day.selected').forEach(s => s.classList.remove('selected'));
             el.classList.add('selected');
             state.date = cellDate;
+            if (onChange) onChange();
           });
         }
         if (state.date &&
